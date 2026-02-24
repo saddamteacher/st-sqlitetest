@@ -1,0 +1,2022 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQLITE TEST JUNIOR | SADDAM TEACHER</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ===================== RESET & BASE ===================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f0f0f;
+            --bg-secondary: #1a1a2e;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --neon-blue: #00d4ff;
+            --neon-green: #00ff88;
+            --neon-purple: #a855f7;
+            --neon-pink: #ff006e;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --text-muted: rgba(255, 255, 255, 0.35);
+            --correct: #00ff88;
+            --wrong: #ff4757;
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow-neon: 0 0 20px rgba(0, 212, 255, 0.15);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ===================== ANIMATED BACKGROUND ===================== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(0, 212, 255, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(0, 255, 136, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(168, 85, 247, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: floatParticle linear infinite;
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* ===================== NAVBAR ===================== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: rgba(15, 15, 15, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(15, 15, 15, 0.95);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 16px;
+            color: #0f0f0f;
+            font-family: 'JetBrains Mono', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-logo::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.3) 50%, transparent 60%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .nav-title {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-teacher {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .nav-teacher:hover {
+            border-color: var(--neon-blue);
+            color: var(--text-primary);
+        }
+
+        .teacher-avatar {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            color: white;
+        }
+
+        .nav-telegram {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            background: linear-gradient(135deg, #0088cc, #00aaff);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-telegram::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.2) 50%, transparent 60%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .nav-telegram:hover::before {
+            transform: translateX(100%);
+        }
+
+        .nav-telegram:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 136, 204, 0.4);
+        }
+
+        /* ===================== MAIN CONTAINER ===================== */
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 100px 20px 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===================== WELCOME SCREEN ===================== */
+        .welcome-screen {
+            text-align: center;
+            padding: 60px 20px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 255, 136, 0.1));
+            border: 2px solid var(--glass-border);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.2); }
+            50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 212, 255, 0.15); }
+        }
+
+        .welcome-title {
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .welcome-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .welcome-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--neon-blue);
+            transform: translateY(-3px);
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .start-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 48px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            border: none;
+            border-radius: 14px;
+            color: #0f0f0f;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .start-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.8s ease;
+        }
+
+        .start-btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.3), 0 0 60px rgba(0, 255, 136, 0.1);
+        }
+
+        .start-btn:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        /* ===================== PROGRESS SECTION ===================== */
+        .progress-section {
+            margin-bottom: 30px;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .progress-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .progress-percent {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--neon-blue);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+            border-radius: 10px;
+            transition: width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4));
+            border-radius: 0 10px 10px 0;
+            animation: progressGlow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes progressGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .question-counter {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .question-counter span {
+            color: var(--neon-blue);
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* ===================== QUESTION CARD ===================== */
+        .question-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 35px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            animation: slideIn 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green), var(--neon-purple));
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+        }
+
+        .question-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--neon-blue);
+            margin-bottom: 20px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: var(--text-primary);
+        }
+
+        .question-text code {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: var(--neon-blue);
+        }
+
+        /* ===================== OPTIONS ===================== */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .option-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(0, 255, 136, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .option-btn:hover::before {
+            opacity: 1;
+        }
+
+        .option-btn:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateX(5px);
+        }
+
+        .option-btn.selected {
+            border-color: var(--neon-blue);
+            background: rgba(0, 212, 255, 0.08);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+        }
+
+        .option-btn.correct {
+            border-color: var(--correct);
+            background: rgba(0, 255, 136, 0.08);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+            animation: correctPulse 0.5s ease;
+        }
+
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .option-btn.wrong {
+            border-color: var(--wrong);
+            background: rgba(255, 71, 87, 0.08);
+            box-shadow: 0 0 20px rgba(255, 71, 87, 0.1);
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        .option-letter {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .option-btn.selected .option-letter {
+            background: var(--neon-blue);
+            border-color: var(--neon-blue);
+            color: #0f0f0f;
+        }
+
+        .option-btn.correct .option-letter {
+            background: var(--correct);
+            border-color: var(--correct);
+            color: #0f0f0f;
+        }
+
+        .option-btn.wrong .option-letter {
+            background: var(--wrong);
+            border-color: var(--wrong);
+            color: white;
+        }
+
+        .option-text {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+            position: relative;
+            z-index: 1;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .option-btn:hover .option-text,
+        .option-btn.selected .option-text {
+            color: var(--text-primary);
+        }
+
+        .option-btn.correct .option-text {
+            color: var(--correct);
+        }
+
+        .option-btn.wrong .option-text {
+            color: var(--wrong);
+        }
+
+        /* ===================== NAVIGATION BUTTONS ===================== */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-prev {
+            background: var(--glass-bg);
+            color: var(--text-secondary);
+        }
+
+        .btn-prev:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            transform: translateX(-3px);
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            color: #0f0f0f;
+            border: none;
+            font-weight: 700;
+        }
+
+        .btn-next:hover {
+            transform: translateX(3px);
+            box-shadow: 0 5px 25px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-next:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-finish {
+            background: linear-gradient(135deg, var(--neon-green), #00cc6a);
+            color: #0f0f0f;
+            border: none;
+            font-weight: 700;
+        }
+
+        .btn-finish:hover {
+            box-shadow: 0 5px 25px rgba(0, 255, 136, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* ===================== RESULT SCREEN ===================== */
+        .result-screen {
+            text-align: center;
+            padding: 40px 20px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .result-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 50px 40px;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green), var(--neon-purple), var(--neon-pink));
+        }
+
+        .result-emoji {
+            font-size: 70px;
+            margin-bottom: 20px;
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .result-title {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-message {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .result-stat {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 25px 15px;
+        }
+
+        .result-stat-value {
+            font-size: 32px;
+            font-weight: 900;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .result-stat-value.correct-val {
+            color: var(--correct);
+        }
+
+        .result-stat-value.wrong-val {
+            color: var(--wrong);
+        }
+
+        .result-stat-value.percent-val {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Score circle */
+        .score-circle {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .score-circle svg {
+            transform: rotate(-90deg);
+        }
+
+        .score-circle-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.05);
+            stroke-width: 8;
+        }
+
+        .score-circle-fill {
+            fill: none;
+            stroke: url(#scoreGradient);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+            transition: stroke-dashoffset 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .score-circle-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .score-circle-percent {
+            font-size: 36px;
+            font-weight: 900;
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .score-circle-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .restart-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            border: none;
+            border-radius: 14px;
+            color: #0f0f0f;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.3);
+        }
+
+        /* ===================== QUESTION DOTS NAVIGATOR ===================== */
+        .dots-navigator {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+            transform: scale(1.3);
+        }
+
+        .dot.answered {
+            background: var(--neon-green);
+        }
+
+        .dot:hover {
+            transform: scale(1.4);
+        }
+
+        /* ===================== HIDDEN ===================== */
+        .hidden {
+            display: none !important;
+        }
+
+        /* ===================== RESPONSIVE ===================== */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 15px;
+                height: 60px;
+            }
+
+            .nav-title {
+                font-size: 13px;
+            }
+
+            .nav-teacher {
+                display: none;
+            }
+
+            .nav-telegram span {
+                display: none;
+            }
+
+            .nav-telegram {
+                padding: 8px 12px;
+            }
+
+            .main-container {
+                padding: 80px 12px 30px;
+            }
+
+            .welcome-title {
+                font-size: 24px;
+            }
+
+            .welcome-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .stat-card {
+                padding: 15px 10px;
+            }
+
+            .stat-number {
+                font-size: 22px;
+            }
+
+            .question-card {
+                padding: 24px 18px;
+                border-radius: 16px;
+            }
+
+            .question-text {
+                font-size: 16px;
+            }
+
+            .option-btn {
+                padding: 14px 16px;
+            }
+
+            .option-text {
+                font-size: 13px;
+            }
+
+            .result-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .result-stat {
+                padding: 20px 10px;
+            }
+
+            .result-stat-value {
+                font-size: 24px;
+            }
+
+            .nav-buttons {
+                flex-wrap: wrap;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 13px;
+            }
+
+            .score-circle {
+                width: 130px;
+                height: 130px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .welcome-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .result-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===================== SCROLLBAR ===================== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* ===================== TOOLTIP ===================== */
+        .topic-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--neon-purple);
+            margin-left: 10px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Particles Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-brand">
+            <div class="nav-logo">SQ</div>
+            <span class="nav-title">SQLITE TEST JUNIOR</span>
+        </div>
+        <div class="nav-right">
+            <div class="nav-teacher">
+                <div class="teacher-avatar">ST</div>
+                <span>SADDAM TEACHER</span>
+            </div>
+            <a href="https://t.me/saddamtg" target="_blank" class="nav-telegram">
+                <i class="fa-brands fa-telegram"></i>
+                <span>Telegram</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ==================== MAIN CONTAINER ==================== -->
+    <div class="main-container">
+
+        <!-- ========== WELCOME SCREEN ========== -->
+        <div id="welcomeScreen" class="welcome-screen">
+            <div class="welcome-icon">🗃️</div>
+            <h1 class="welcome-title">SQLite Test Junior</h1>
+            <p class="welcome-subtitle">
+                SQLite bo'yicha 40 ta savoldan iborat test.<br>
+                Bilimingizni sinab ko'ring va natijangizni bilib oling!
+            </p>
+            <div class="welcome-stats">
+                <div class="stat-card">
+                    <div class="stat-number">40</div>
+                    <div class="stat-label">Savollar</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Variantlar</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Vaqt</div>
+                </div>
+            </div>
+            <button class="start-btn" onclick="startTest()">
+                <i class="fas fa-play"></i>
+                Testni Boshlash
+            </button>
+        </div>
+
+        <!-- ========== TEST SCREEN ========== -->
+        <div id="testScreen" class="hidden">
+            <!-- Progress -->
+            <div class="progress-section">
+                <div class="progress-header">
+                    <span class="progress-text">
+                        <i class="fas fa-chart-line"></i> Progress
+                    </span>
+                    <span class="progress-percent" id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progressBar" style="width: 0%"></div>
+                </div>
+                <div class="question-counter">
+                    <i class="fas fa-question-circle"></i>
+                    Savol <span id="currentNum">1</span> / <span>40</span>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="question-card" id="questionCard">
+                <div>
+                    <span class="question-badge" id="questionBadge">
+                        <i class="fas fa-hashtag"></i> Savol 1
+                    </span>
+                    <span class="topic-badge" id="topicBadge">CREATE TABLE</span>
+                </div>
+                <p class="question-text" id="questionText"></p>
+                <div class="options-container" id="optionsContainer"></div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="nav-buttons">
+                <button class="btn btn-prev" id="prevBtn" onclick="prevQuestion()">
+                    <i class="fas fa-arrow-left"></i> Oldingi
+                </button>
+                <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()" disabled>
+                    Keyingi <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- Dots Navigator -->
+            <div class="dots-navigator" id="dotsNavigator"></div>
+        </div>
+
+        <!-- ========== RESULT SCREEN ========== -->
+        <div id="resultScreen" class="hidden result-screen">
+            <div class="result-card">
+                <div class="result-emoji" id="resultEmoji">🎉</div>
+
+                <!-- Score Circle -->
+                <div class="score-circle">
+                    <svg width="100%" height="100%" viewBox="0 0 160 160">
+                        <defs>
+                            <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#00d4ff" />
+                                <stop offset="100%" style="stop-color:#00ff88" />
+                            </linearGradient>
+                        </defs>
+                        <circle class="score-circle-bg" cx="80" cy="80" r="70"></circle>
+                        <circle class="score-circle-fill" id="scoreCircle" cx="80" cy="80" r="70"></circle>
+                    </svg>
+                    <div class="score-circle-text">
+                        <div class="score-circle-percent" id="scorePercent">0%</div>
+                        <div class="score-circle-label">Ball</div>
+                    </div>
+                </div>
+
+                <h2 class="result-title" id="resultTitle">Tabriklaymiz!</h2>
+                <p class="result-message" id="resultMessage">Siz testni muvaffaqiyatli yakunladingiz.</p>
+
+                <div class="result-stats">
+                    <div class="result-stat">
+                        <div class="result-stat-value correct-val" id="correctCount">0</div>
+                        <div class="result-stat-label">To'g'ri</div>
+                    </div>
+                    <div class="result-stat">
+                        <div class="result-stat-value wrong-val" id="wrongCount">0</div>
+                        <div class="result-stat-label">Noto'g'ri</div>
+                    </div>
+                    <div class="result-stat">
+                        <div class="result-stat-value percent-val" id="percentResult">0%</div>
+                        <div class="result-stat-label">Foiz</div>
+                    </div>
+                </div>
+
+                <button class="restart-btn" onclick="restartTest()">
+                    <i class="fas fa-redo"></i> Qayta Boshlash
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===================== 40 TA SQLITE SAVOLLARI =====================
+        const questions = [
+            // 1. CREATE TABLE
+            {
+                topic: "CREATE TABLE",
+                question: "SQLite da yangi jadval yaratish uchun qaysi SQL buyrug'i ishlatiladi?",
+                options: [
+                    "NEW TABLE students",
+                    "CREATE TABLE students",
+                    "MAKE TABLE students",
+                    "ADD TABLE students"
+                ],
+                correct: 1
+            },
+            // 2. CREATE TABLE - Column types
+            {
+                topic: "CREATE TABLE",
+                question: "<code>CREATE TABLE users (id INTEGER, name TEXT);</code> — bu buyruqda <code>TEXT</code> nima?",
+                options: [
+                    "Jadval nomi",
+                    "Ustun nomi",
+                    "Ma'lumot turi (data type)",
+                    "Kalit so'z"
+                ],
+                correct: 2
+            },
+            // 3. INSERT INTO
+            {
+                topic: "INSERT INTO",
+                question: "Jadvalga yangi ma'lumot qo'shish uchun qaysi buyruq ishlatiladi?",
+                options: [
+                    "ADD INTO students VALUES(...)",
+                    "PUT INTO students VALUES(...)",
+                    "INSERT INTO students VALUES(...)",
+                    "PUSH INTO students VALUES(...)"
+                ],
+                correct: 2
+            },
+            // 4. INSERT INTO
+            {
+                topic: "INSERT INTO",
+                question: "<code>INSERT INTO users (name, age) VALUES ('Ali', 20);</code> — bu buyruq nima qiladi?",
+                options: [
+                    "users jadvalidan ma'lumot o'chiradi",
+                    "users jadvaliga name='Ali', age=20 qo'shadi",
+                    "users jadvalini yangilaydi",
+                    "users jadvalini yaratadi"
+                ],
+                correct: 1
+            },
+            // 5. SELECT
+            {
+                topic: "SELECT",
+                question: "Jadvaldan barcha ustunlarni tanlash uchun qaysi belgi ishlatiladi?",
+                options: [
+                    "SELECT # FROM users",
+                    "SELECT @ FROM users",
+                    "SELECT * FROM users",
+                    "SELECT ALL FROM users"
+                ],
+                correct: 2
+            },
+            // 6. SELECT
+            {
+                topic: "SELECT",
+                question: "<code>SELECT name, age FROM students;</code> — bu buyruq nima qiladi?",
+                options: [
+                    "Barcha ustunlarni ko'rsatadi",
+                    "Faqat name va age ustunlarini ko'rsatadi",
+                    "students jadvalini o'chiradi",
+                    "Yangi ustun qo'shadi"
+                ],
+                correct: 1
+            },
+            // 7. WHERE
+            {
+                topic: "WHERE",
+                question: "Ma'lumotlarni filtrlash uchun qaysi kalit so'z ishlatiladi?",
+                options: [
+                    "FILTER",
+                    "FIND",
+                    "WHERE",
+                    "SEARCH"
+                ],
+                correct: 2
+            },
+            // 8. WHERE
+            {
+                topic: "WHERE",
+                question: "<code>SELECT * FROM users WHERE age > 18;</code> — bu qaysi foydalanuvchilarni ko'rsatadi?",
+                options: [
+                    "Yoshi 18 ga teng bo'lganlar",
+                    "Yoshi 18 dan katta bo'lganlar",
+                    "Yoshi 18 dan kichik bo'lganlar",
+                    "Barcha foydalanuvchilar"
+                ],
+                correct: 1
+            },
+            // 9. ORDER BY
+            {
+                topic: "ORDER BY",
+                question: "Ma'lumotlarni tartiblash uchun qaysi kalit so'z ishlatiladi?",
+                options: [
+                    "SORT BY",
+                    "ARRANGE BY",
+                    "GROUP BY",
+                    "ORDER BY"
+                ],
+                correct: 3
+            },
+            // 10. ORDER BY - DESC
+            {
+                topic: "ORDER BY",
+                question: "<code>SELECT * FROM users ORDER BY age DESC;</code> — <code>DESC</code> nima ma'noni anglatadi?",
+                options: [
+                    "O'sish tartibida",
+                    "Kamayish tartibida",
+                    "Tasodifiy tartibda",
+                    "Alifbo tartibida"
+                ],
+                correct: 1
+            },
+            // 11. GROUP BY
+            {
+                topic: "GROUP BY",
+                question: "<code>GROUP BY</code> kalit so'zi nima uchun ishlatiladi?",
+                options: [
+                    "Ma'lumotlarni tartiblash",
+                    "Ma'lumotlarni guruhlash",
+                    "Ma'lumotlarni o'chirish",
+                    "Ma'lumotlarni qo'shish"
+                ],
+                correct: 1
+            },
+            // 12. GROUP BY
+            {
+                topic: "GROUP BY",
+                question: "<code>SELECT city, COUNT(*) FROM users GROUP BY city;</code> — bu nima qiladi?",
+                options: [
+                    "Har bir shahardagi foydalanuvchilar sonini ko'rsatadi",
+                    "Shaharlarni o'chiradi",
+                    "Barcha foydalanuvchilarni ko'rsatadi",
+                    "Yangi shahar qo'shadi"
+                ],
+                correct: 0
+            },
+            // 13. HAVING
+            {
+                topic: "HAVING",
+                question: "<code>HAVING</code> kalit so'zi <code>WHERE</code> dan qanday farq qiladi?",
+                options: [
+                    "Farqi yo'q",
+                    "HAVING faqat GROUP BY bilan ishlatiladi",
+                    "WHERE faqat GROUP BY bilan ishlatiladi",
+                    "HAVING tezroq ishlaydi"
+                ],
+                correct: 1
+            },
+            // 14. HAVING
+            {
+                topic: "HAVING",
+                question: "<code>SELECT city, COUNT(*) as cnt FROM users GROUP BY city HAVING cnt > 5;</code> — bu nima qiladi?",
+                options: [
+                    "5 dan kam foydalanuvchisi bor shaharlarni ko'rsatadi",
+                    "5 dan ko'p foydalanuvchisi bor shaharlarni ko'rsatadi",
+                    "Barcha shaharlarni ko'rsatadi",
+                    "5-foydalanuvchini ko'rsatadi"
+                ],
+                correct: 1
+            },
+            // 15. UPDATE
+            {
+                topic: "UPDATE",
+                question: "Jadvalda mavjud ma'lumotni o'zgartirish uchun qaysi buyruq ishlatiladi?",
+                options: [
+                    "MODIFY",
+                    "CHANGE",
+                    "ALTER",
+                    "UPDATE"
+                ],
+                correct: 3
+            },
+            // 16. UPDATE
+            {
+                topic: "UPDATE",
+                question: "<code>UPDATE users SET age = 25 WHERE name = 'Ali';</code> — bu nima qiladi?",
+                options: [
+                    "Barcha foydalanuvchilar yoshini 25 qiladi",
+                    "Ali ismli foydalanuvchi yoshini 25 ga o'zgartiradi",
+                    "Ali ismli foydalanuvchini o'chiradi",
+                    "Yangi foydalanuvchi qo'shadi"
+                ],
+                correct: 1
+            },
+            // 17. DELETE
+            {
+                topic: "DELETE",
+                question: "Jadvaldan ma'lumotni o'chirish uchun qaysi buyruq ishlatiladi?",
+                options: [
+                    "REMOVE FROM",
+                    "DELETE FROM",
+                    "DROP FROM",
+                    "ERASE FROM"
+                ],
+                correct: 1
+            },
+            // 18. DELETE
+            {
+                topic: "DELETE",
+                question: "<code>DELETE FROM users;</code> — bu buyruq nima qiladi?",
+                options: [
+                    "users jadvalini o'chiradi (tuzilmasi bilan)",
+                    "users jadvalidagi barcha ma'lumotlarni o'chiradi",
+                    "users jadvalidan birinchi qatorni o'chiradi",
+                    "Hech narsa qilmaydi"
+                ],
+                correct: 1
+            },
+            // 19. PRIMARY KEY
+            {
+                topic: "PRIMARY KEY",
+                question: "<code>PRIMARY KEY</code> nima vazifani bajaradi?",
+                options: [
+                    "Ustunni yashiradi",
+                    "Har bir qatorni noyob (unique) identifikatsiya qiladi",
+                    "Ma'lumotlarni tartiblaydi",
+                    "Ustunni o'chiradi"
+                ],
+                correct: 1
+            },
+            // 20. PRIMARY KEY
+            {
+                topic: "PRIMARY KEY",
+                question: "Bitta jadvalda nechta PRIMARY KEY bo'lishi mumkin?",
+                options: [
+                    "Cheksiz",
+                    "2 ta",
+                    "Faqat 1 ta",
+                    "3 ta"
+                ],
+                correct: 2
+            },
+            // 21. AUTOINCREMENT
+            {
+                topic: "AUTOINCREMENT",
+                question: "<code>AUTOINCREMENT</code> nima qiladi?",
+                options: [
+                    "Avtomatik ravishda qiymatni 1 ga oshirib boradi",
+                    "Ma'lumotlarni tartiblaydi",
+                    "Jadvalga yangi ustun qo'shadi",
+                    "Ma'lumotlarni o'chiradi"
+                ],
+                correct: 0
+            },
+            // 22. AUTOINCREMENT
+            {
+                topic: "AUTOINCREMENT",
+                question: "<code>id INTEGER PRIMARY KEY AUTOINCREMENT</code> — bu ustun qanday ishlaydi?",
+                options: [
+                    "id qiymati har doim 0 bo'ladi",
+                    "id qiymatini qo'lda kiritish kerak",
+                    "id qiymati avtomatik oshib boradi va takrorlanmaydi",
+                    "id ustuni yo'qoladi"
+                ],
+                correct: 2
+            },
+            // 23. FOREIGN KEY
+            {
+                topic: "FOREIGN KEY",
+                question: "<code>FOREIGN KEY</code> nima uchun ishlatiladi?",
+                options: [
+                    "Jadval nomini o'zgartirish",
+                    "Ikki jadval orasida bog'lanish o'rnatish",
+                    "Ma'lumotni o'chirish",
+                    "Yangi jadval yaratish"
+                ],
+                correct: 1
+            },
+            // 24. FOREIGN KEY
+            {
+                topic: "FOREIGN KEY",
+                question: "<code>FOREIGN KEY (user_id) REFERENCES users(id)</code> — bu nima degani?",
+                options: [
+                    "user_id ustuni users jadvalidagi id ga bog'langan",
+                    "users jadvalini o'chiradi",
+                    "Yangi id yaratadi",
+                    "user_id ustunini o'chiradi"
+                ],
+                correct: 0
+            },
+            // 25. JOIN
+            {
+                topic: "JOIN",
+                question: "Ikki jadvaldan ma'lumotni birlashtirish uchun qaysi kalit so'z ishlatiladi?",
+                options: [
+                    "MERGE",
+                    "COMBINE",
+                    "JOIN",
+                    "UNITE"
+                ],
+                correct: 2
+            },
+            // 26. JOIN
+            {
+                topic: "JOIN",
+                question: "<code>INNER JOIN</code> qanday ishlaydi?",
+                options: [
+                    "Ikkala jadvalda ham mos keladigan qatorlarni qaytaradi",
+                    "Faqat birinchi jadval ma'lumotlarini qaytaradi",
+                    "Barcha qatorlarni qaytaradi",
+                    "Jadvallarni o'chiradi"
+                ],
+                correct: 0
+            },
+            // 27. COUNT
+            {
+                topic: "COUNT",
+                question: "<code>SELECT COUNT(*) FROM users;</code> — bu nima qaytaradi?",
+                options: [
+                    "Barcha ustunlar sonini",
+                    "Barcha qatorlar (yozuvlar) sonini",
+                    "Jadvallar sonini",
+                    "NULL qiymatlar sonini"
+                ],
+                correct: 1
+            },
+            // 28. COUNT
+            {
+                topic: "COUNT",
+                question: "<code>SELECT COUNT(email) FROM users;</code> — bu <code>COUNT(*)</code> dan qanday farq qiladi?",
+                options: [
+                    "Farqi yo'q",
+                    "COUNT(email) NULL bo'lmagan email larni hisoblaydi",
+                    "COUNT(email) tezroq ishlaydi",
+                    "COUNT(email) barcha qatorlarni hisoblaydi"
+                ],
+                correct: 1
+            },
+            // 29. AVG
+            {
+                topic: "AVG",
+                question: "<code>SELECT AVG(age) FROM users;</code> — bu nima qaytaradi?",
+                options: [
+                    "Eng katta yoshni",
+                    "Eng kichik yoshni",
+                    "Yoshlarning o'rtacha qiymatini",
+                    "Yoshlarning yig'indisini"
+                ],
+                correct: 2
+            },
+            // 30. SUM
+            {
+                topic: "SUM",
+                question: "<code>SELECT SUM(price) FROM products;</code> — bu nima hisoblab beradi?",
+                options: [
+                    "Eng yuqori narxni",
+                    "Narxlarning o'rtachasini",
+                    "Mahsulotlar sonini",
+                    "Barcha narxlarning yig'indisini"
+                ],
+                correct: 3
+            },
+            // 31. MAX
+            {
+                topic: "MAX",
+                question: "<code>SELECT MAX(salary) FROM employees;</code> — natija nima bo'ladi?",
+                options: [
+                    "Eng kichik maosh",
+                    "O'rtacha maosh",
+                    "Eng katta maosh",
+                    "Maoshlar yig'indisi"
+                ],
+                correct: 2
+            },
+            // 32. MIN
+            {
+                topic: "MIN",
+                question: "<code>SELECT MIN(age) FROM students;</code> — natija nima bo'ladi?",
+                options: [
+                    "Eng katta yosh",
+                    "Eng kichik yosh",
+                    "O'rtacha yosh",
+                    "Yoshlar soni"
+                ],
+                correct: 1
+            },
+            // 33. LIKE
+            {
+                topic: "LIKE",
+                question: "<code>SELECT * FROM users WHERE name LIKE 'A%';</code> — bu nimani tanlaydi?",
+                options: [
+                    "Ismi 'A' harfi bilan tugaydigan foydalanuvchilar",
+                    "Ismi 'A' harfi bilan boshlanadigan foydalanuvchilar",
+                    "Ismida 'A' harfi bor foydalanuvchilar",
+                    "Ismi faqat 'A' bo'lgan foydalanuvchilar"
+                ],
+                correct: 1
+            },
+            // 34. LIKE
+            {
+                topic: "LIKE",
+                question: "<code>LIKE</code> operatorida <code>_</code> (pastki chiziq) nima vazifani bajaradi?",
+                options: [
+                    "Har qanday uzunlikdagi belgilar o'rniga",
+                    "Aynan bitta belgining o'rniga turadi",
+                    "Bo'sh joyni bildiradi",
+                    "Raqamni bildiradi"
+                ],
+                correct: 1
+            },
+            // 35. LIMIT
+            {
+                topic: "LIMIT",
+                question: "<code>SELECT * FROM users LIMIT 10;</code> — bu nima qiladi?",
+                options: [
+                    "10-chi foydalanuvchini ko'rsatadi",
+                    "Faqat birinchi 10 ta qatorni qaytaradi",
+                    "10 ta jadval yaratadi",
+                    "Har 10 ta qatordan bittasini tanlaydi"
+                ],
+                correct: 1
+            },
+            // 36. LIMIT + OFFSET
+            {
+                topic: "LIMIT",
+                question: "<code>SELECT * FROM users LIMIT 5 OFFSET 10;</code> — bu nima qiladi?",
+                options: [
+                    "Birinchi 5 ta qatorni ko'rsatadi",
+                    "11-chi qatordan boshlab 5 ta qatorni ko'rsatadi",
+                    "Oxirgi 5 ta qatorni ko'rsatadi",
+                    "10 ta qatorni o'chiradi"
+                ],
+                correct: 1
+            },
+            // 37. Mixed - DROP TABLE
+            {
+                topic: "CREATE TABLE",
+                question: "<code>DROP TABLE users;</code> — bu buyruq nima qiladi?",
+                options: [
+                    "users jadvalidagi ma'lumotlarni o'chiradi",
+                    "users jadvalini butunlay yo'q qiladi (tuzilmasi bilan)",
+                    "users jadvalini qayta nomlaydi",
+                    "users jadvaliga ustun qo'shadi"
+                ],
+                correct: 1
+            },
+            // 38. Mixed - DISTINCT
+            {
+                topic: "SELECT",
+                question: "<code>SELECT DISTINCT city FROM users;</code> — <code>DISTINCT</code> nima qiladi?",
+                options: [
+                    "Barcha shaharlarni ko'rsatadi (takrorlanganlari bilan)",
+                    "Faqat noyob (takrorlanmaydigan) shaharlarni ko'rsatadi",
+                    "Shaharlarni o'chiradi",
+                    "Birinchi shaharnigina ko'rsatadi"
+                ],
+                correct: 1
+            },
+            // 39. Mixed - AND/OR
+            {
+                topic: "WHERE",
+                question: "<code>SELECT * FROM users WHERE age > 18 AND city = 'Toshkent';</code> — bu qanday ishlaydi?",
+                options: [
+                    "Yoshi 18 dan katta YOKI shahri Toshkent",
+                    "Yoshi 18 dan katta VA shahri Toshkent — ikkala shart ham bajarilishi kerak",
+                    "Faqat shahri Toshkent bo'lganlar",
+                    "Faqat yoshi 18 dan katta bo'lganlar"
+                ],
+                correct: 1
+            },
+            // 40. Mixed - NULL
+            {
+                topic: "WHERE",
+                question: "<code>SELECT * FROM users WHERE email IS NULL;</code> — bu qaysi foydalanuvchilarni ko'rsatadi?",
+                options: [
+                    "Email adresi bor foydalanuvchilar",
+                    "Email adresi bo'sh ('') foydalanuvchilar",
+                    "Email ustuni NULL (qiymati yo'q) bo'lgan foydalanuvchilar",
+                    "Barcha foydalanuvchilar"
+                ],
+                correct: 2
+            }
+        ];
+
+        // ===================== STATE VARIABLES =====================
+        let currentQuestion = 0;        // Joriy savol indeksi
+        let userAnswers = new Array(40).fill(null);  // Foydalanuvchi javoblari
+        let testStarted = false;         // Test boshlangan-boslashmaganligini
+
+        // ===================== DOM ELEMENTS =====================
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const testScreen = document.getElementById('testScreen');
+        const resultScreen = document.getElementById('resultScreen');
+        const progressBar = document.getElementById('progressBar');
+        const progressPercent = document.getElementById('progressPercent');
+        const currentNum = document.getElementById('currentNum');
+        const questionBadge = document.getElementById('questionBadge');
+        const topicBadge = document.getElementById('topicBadge');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dotsNavigator = document.getElementById('dotsNavigator');
+
+        // ===================== PARTICLES GENERATOR =====================
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                particle.style.animationDelay = (Math.random() * 10) + 's';
+                particle.style.width = (Math.random() * 3 + 1) + 'px';
+                particle.style.height = particle.style.width;
+
+                // Turli ranglar
+                const colors = ['#00d4ff', '#00ff88', '#a855f7', '#ff006e'];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // ===================== NAVBAR SCROLL EFFECT =====================
+        window.addEventListener('scroll', function () {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // ===================== TEST BOSHLASH =====================
+        function startTest() {
+            welcomeScreen.classList.add('hidden');
+            testScreen.classList.remove('hidden');
+            testStarted = true;
+            createDots();
+            renderQuestion();
+        }
+
+        // ===================== DOTS NAVIGATOR YARATISH =====================
+        function createDots() {
+            dotsNavigator.innerHTML = '';
+            for (let i = 0; i < 40; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                dot.title = `Savol ${i + 1}`;
+                dot.addEventListener('click', () => goToQuestion(i));
+                dotsNavigator.appendChild(dot);
+            }
+        }
+
+        // ===================== DOTS YANGILASH =====================
+        function updateDots() {
+            const dots = dotsNavigator.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.remove('active', 'answered');
+                if (index === currentQuestion) {
+                    dot.classList.add('active');
+                } else if (userAnswers[index] !== null) {
+                    dot.classList.add('answered');
+                }
+            });
+        }
+
+        // ===================== SAVOLGA O'TISH =====================
+        function goToQuestion(index) {
+            currentQuestion = index;
+            renderQuestion();
+        }
+
+        // ===================== SAVOLNI RENDER QILISH =====================
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+
+            // Badge va topic
+            questionBadge.innerHTML = `<i class="fas fa-hashtag"></i> Savol ${currentQuestion + 1}`;
+            topicBadge.textContent = q.topic;
+            currentNum.textContent = currentQuestion + 1;
+
+            // Savol matni
+            questionText.innerHTML = q.question;
+
+            // Variantlar
+            optionsContainer.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+
+                // Agar oldin javob berilgan bo'lsa
+                if (userAnswers[currentQuestion] === index) {
+                    btn.classList.add('selected');
+                }
+
+                btn.innerHTML = `
+                    <div class="option-letter">${letters[index]}</div>
+                    <div class="option-text">${option}</div>
+                `;
+
+                btn.addEventListener('click', () => selectOption(index));
+                optionsContainer.appendChild(btn);
+            });
+
+            // Progress yangilash
+            updateProgress();
+
+            // Dots yangilash
+            updateDots();
+
+            // Tugmalar holatini yangilash
+            updateButtons();
+
+            // Animatsiya
+            const card = document.getElementById('questionCard');
+            card.style.animation = 'none';
+            card.offsetHeight; // reflow trigger
+            card.style.animation = 'slideIn 0.4s ease';
+
+            // Yuqoriga scroll
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ===================== VARIANT TANLASH =====================
+        function selectOption(index) {
+            userAnswers[currentQuestion] = index;
+
+            // Barcha variantlardan selected klassini olib tashlash
+            const options = optionsContainer.querySelectorAll('.option-btn');
+            options.forEach(opt => opt.classList.remove('selected'));
+
+            // Tanlangan variantga selected klassi qo'shish
+            options[index].classList.add('selected');
+
+            // Tugmalarni yangilash
+            updateButtons();
+
+            // Dots yangilash
+            updateDots();
+
+            // Progress yangilash
+            updateProgress();
+        }
+
+        // ===================== PROGRESS YANGILASH =====================
+        function updateProgress() {
+            const answered = userAnswers.filter(a => a !== null).length;
+            const percent = Math.round((answered / 40) * 100);
+
+            progressBar.style.width = percent + '%';
+            progressPercent.textContent = percent + '%';
+        }
+
+        // ===================== TUGMALAR HOLATINI YANGILASH =====================
+        function updateButtons() {
+            // Oldingi tugma
+            prevBtn.style.visibility = currentQuestion === 0 ? 'hidden' : 'visible';
+
+            // Keyingi / Tugatish tugmasi
+            const isLastQuestion = currentQuestion === 39;
+            const hasAnswer = userAnswers[currentQuestion] !== null;
+
+            if (isLastQuestion) {
+                nextBtn.className = 'btn btn-finish';
+                nextBtn.innerHTML = '<i class="fas fa-check-circle"></i> Testni Tugatish';
+                nextBtn.onclick = finishTest;
+                nextBtn.disabled = false; // Always allow finish
+            } else {
+                nextBtn.className = 'btn btn-next';
+                nextBtn.innerHTML = 'Keyingi <i class="fas fa-arrow-right"></i>';
+                nextBtn.onclick = nextQuestion;
+                nextBtn.disabled = !hasAnswer;
+            }
+        }
+
+        // ===================== KEYINGI SAVOL =====================
+        function nextQuestion() {
+            if (currentQuestion < 39) {
+                currentQuestion++;
+                renderQuestion();
+            }
+        }
+
+        // ===================== OLDINGI SAVOL =====================
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        // ===================== TESTNI TUGATISH =====================
+        function finishTest() {
+            // Javobsiz savollar borligini tekshirish
+            const unanswered = userAnswers.filter(a => a === null).length;
+            if (unanswered > 0) {
+                if (!confirm(`Hali ${unanswered} ta savolga javob bermadingiz. Testni tugatishni xohlaysizmi?`)) {
+                    return;
+                }
+            }
+
+            // Natijani hisoblash
+            let correctCount = 0;
+            questions.forEach((q, i) => {
+                if (userAnswers[i] === q.correct) {
+                    correctCount++;
+                }
+            });
+
+            const wrongCount = 40 - correctCount;
+            const percent = Math.round((correctCount / 40) * 100);
+
+            // Ekranlarni almashtirish
+            testScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            // Natija ma'lumotlarini ko'rsatish
+            document.getElementById('correctCount').textContent = correctCount;
+            document.getElementById('wrongCount').textContent = wrongCount;
+            document.getElementById('percentResult').textContent = percent + '%';
+            document.getElementById('scorePercent').textContent = percent + '%';
+
+            // Emoji va xabar
+            let emoji, title, message;
+            if (percent >= 90) {
+                emoji = '🏆'; title = 'Ajoyib natija!'; message = "Siz SQLite bo'yicha zo'r bilimga egasiz!";
+            } else if (percent >= 70) {
+                emoji = '🎉'; title = 'Yaxshi natija!'; message = "Bilimingiz yaxshi, lekin yana biroz mashq qiling.";
+            } else if (percent >= 50) {
+                emoji = '💪'; title = "O'rtacha natija"; message = "Yomon emas, lekin ko'proq o'rganish kerak.";
+            } else {
+                emoji = '📚'; title = "Ko'proq o'rganing"; message = "SQLite mavzularini qaytadan o'rganing va qayta urinib ko'ring.";
+            }
+
+            document.getElementById('resultEmoji').textContent = emoji;
+            document.getElementById('resultTitle').textContent = title;
+            document.getElementById('resultMessage').textContent = message;
+
+            // Score circle animatsiya
+            setTimeout(() => {
+                const circumference = 2 * Math.PI * 70; // r=70
+                const offset = circumference - (percent / 100) * circumference;
+                document.getElementById('scoreCircle').style.strokeDashoffset = offset;
+            }, 300);
+
+            // Yuqoriga scroll
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ===================== QAYTA BOSHLASH =====================
+        function restartTest() {
+            currentQuestion = 0;
+            userAnswers = new Array(40).fill(null);
+
+            resultScreen.classList.add('hidden');
+            welcomeScreen.classList.remove('hidden');
+
+            // Score circle reset
+            document.getElementById('scoreCircle').style.strokeDashoffset = 440;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ===================== KLAVIATURA BILAN BOSHQARISH =====================
+        document.addEventListener('keydown', function (e) {
+            if (!testStarted || !testScreen.classList.contains('hidden') === false) {
+                if (testScreen.classList.contains('hidden')) return;
+
+                switch (e.key) {
+                    case '1': case 'a': case 'A':
+                        selectOption(0); break;
+                    case '2': case 'b': case 'B':
+                        selectOption(1); break;
+                    case '3': case 'c': case 'C':
+                        selectOption(2); break;
+                    case '4': case 'd': case 'D':
+                        selectOption(3); break;
+                    case 'ArrowRight':
+                    case 'Enter':
+                        if (userAnswers[currentQuestion] !== null) {
+                            if (currentQuestion === 39) finishTest();
+                            else nextQuestion();
+                        }
+                        break;
+                    case 'ArrowLeft':
+                        prevQuestion(); break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
